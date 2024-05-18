@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glass Effect Login Form</title>
+    <title>Glass Effect Auth Forms</title>
     <style>
         body {
             margin: 0;
@@ -20,15 +20,7 @@
         .container {
             position: relative;
             width: 300px;
-            height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .glass-form {
-            width: 100%;
-            padding: 20px;
+            padding: 40px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -38,9 +30,9 @@
             text-align: center;
         }
 
-        .glass-form h2 {
-            margin-bottom: 20px;
+        .container h2 {
             color: white;
+            margin-bottom: 20px;
         }
 
         .input-group {
@@ -90,23 +82,47 @@
         button:hover {
             background: #0288d1;
         }
+
+        .toggle-link {
+            margin-top: 20px;
+            color: #03a9f4;
+            cursor: pointer;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="glass-form">
+        <div id="loginFormContainer">
             <h2>Login</h2>
             <form id="loginForm">
                 <div class="input-group">
-                    <input type="email" id="email" required>
-                    <label for="email">Email</label>
+                    <input type="email" id="loginEmail" required>
+                    <label for="loginEmail">Email</label>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" required>
-                    <label for="password">Password</label>
+                    <input type="password" id="loginPassword" required>
+                    <label for="loginPassword">Password</label>
                 </div>
                 <button type="submit">Login</button>
             </form>
+            <div class="toggle-link" id="showSignUp">Don't have an account? Sign up</div>
+        </div>
+        
+        <div id="signUpFormContainer" style="display: none;">
+            <h2>Sign Up</h2>
+            <form id="signUpForm">
+                <div class="input-group">
+                    <input type="email" id="signUpEmail" required>
+                    <label for="signUpEmail">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signUpPassword" required>
+                    <label for="signUpPassword">Password</label>
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+            <div class="toggle-link" id="showLogin">Already have an account? Login</div>
         </div>
     </div>
 
@@ -116,30 +132,60 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script>
         // Firebase configuration
-        const firebaseConfig = {
-  apiKey: "AIzaSyCuZ0fE2EltxBV-UA3PCEgOcvM6A1iHTuw",
-  authDomain: "myanconnect.firebaseapp.com",
-  projectId: "myanconnect",
-  storageBucket: "myanconnect.appspot.com",
-  messagingSenderId: "348861661968",
-  appId: "1:348861661968:web:ae7b415dedb76555529b95",
-  measurementId: "G-6ZS7NGQ54H"
-};
+        var firebaseConfig = {
+            apiKey: "AIzaSyCuZ0fE2EltxBV-UA3PCEgOcvM6A1iHTuw",
+            authDomain: "myanconnect.firebaseapp.com",
+            projectId: "myanconnect",
+            storageBucket: "myanconnect.appspot.com",
+            messagingSenderId: "348861661968",
+            appId: "1:348861661968:web:ae7b415dedb76555529b95",
+            measurementId: "G-6ZS7NGQ54H"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
+        // Toggle between login and sign-up forms
+        document.getElementById('showSignUp').addEventListener('click', function() {
+            document.getElementById('loginFormContainer').style.display = 'none';
+            document.getElementById('signUpFormContainer').style.display = 'block';
+        });
+
+        document.getElementById('showLogin').addEventListener('click', function() {
+            document.getElementById('signUpFormContainer').style.display = 'none';
+            document.getElementById('loginFormContainer').style.display = 'block';
+        });
+
+        // Login form submission
         document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
-            
+            var email = document.getElementById('loginEmail').value;
+            var password = document.getElementById('loginPassword').value;
+
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Signed in 
                     var user = userCredential.user;
                     alert('Login Successful');
+                    console.log(user);
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    alert(errorMessage);
+                    console.error(errorCode, errorMessage);
+                });
+        });
+
+        // Sign-up form submission
+        document.getElementById('signUpForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var email = document.getElementById('signUpEmail').value;
+            var password = document.getElementById('signUpPassword').value;
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    var user = userCredential.user;
+                    alert('Sign Up Successful');
                     console.log(user);
                 })
                 .catch((error) => {
