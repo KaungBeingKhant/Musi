@@ -4,7 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glass Effect Login Form</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-form {
+            width: 100%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .glass-form h2 {
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid white;
+            color: white;
+            font-size: 16px;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            color: white;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .input-group input:focus ~ label,
+        .input-group input:valid ~ label {
+            top: -20px;
+            left: 0;
+            font-size: 12px;
+            color: #03a9f4;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: #03a9f4;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #0288d1;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -28,6 +114,41 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <!-- Add Firebase products that you want to use -->
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
-    <script src="app.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+  apiKey: "AIzaSyCuZ0fE2EltxBV-UA3PCEgOcvM6A1iHTuw",
+  authDomain: "myanconnect.firebaseapp.com",
+  projectId: "myanconnect",
+  storageBucket: "myanconnect.appspot.com",
+  messagingSenderId: "348861661968",
+  appId: "1:348861661968:web:ae7b415dedb76555529b95",
+  measurementId: "G-6ZS7NGQ54H"
+};
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    var user = userCredential.user;
+                    alert('Login Successful');
+                    console.log(user);
+                })
+                .catch((error) => {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    alert(errorMessage);
+                    console.error(errorCode, errorMessage);
+                });
+        });
+    </script>
 </body>
 </html>
