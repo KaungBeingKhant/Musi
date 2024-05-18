@@ -3,174 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MusiClone</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-
-        header {
-            background-color: #282828;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        .search-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            border-radius: 5px 0 0 5px;
-            border: none;
-            width: 300px;
-            font-size: 16px;
-        }
-
-        button {
-            padding: 10px 20px;
-            border-radius: 0 5px 5px 0;
-            border: none;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .video-player {
-            width: 560px;
-            height: 315px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .search-results {
-            width: 560px;
-        }
-
-        .videoItem {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.2s;
-        }
-
-        .videoItem:hover {
-            transform: scale(1.05);
-        }
-
-        .videoItem img {
-            width: 120px;
-            height: 90px;
-            object-fit: cover;
-        }
-
-        .videoItem p {
-            margin: 0;
-            padding: 10px;
-            flex: 1;
-            font-size: 16px;
-        }
-
-        .videoItem button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.2s;
-        }
-
-        .videoItem button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Glass Effect Login Form</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>MusiClone</h1>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search for songs...">
-            <button onclick="searchVideos()">Search</button>
-        </div>
-    </header>
-    
-    <div class="main-container">
-        <div id="videoPlayer" class="video-player">
-            <!-- YouTube video player will be added here -->
-        </div>
-
-        <div id="searchResults" class="search-results">
-            <!-- Search results will be displayed here -->
+    <div class="container">
+        <div class="glass-form">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="email" id="email" required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" required>
+                    <label for="password">Password</label>
+                </div>
+                <button type="submit">Login</button>
+            </form>
         </div>
     </div>
 
-    <script>
-        // Function to search for videos using the YouTube API
-        function searchVideos() {
-            var searchQuery = document.getElementById("searchInput").value;
-            var apiKey = "AIzaSyC9ppK_4kYIOxsTfbYs1tfjnwpLXiM1IYc";
-            var url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=" + searchQuery + "&key=" + apiKey;
-
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                displaySearchResults(data.items);
-            })
-            .catch(error => console.error('Error fetching data: ', error));
-        }
-
-        // Function to display search results
-        function displaySearchResults(items) {
-            var searchResultsDiv = document.getElementById("searchResults");
-            searchResultsDiv.innerHTML = "";
-
-            items.forEach(item => {
-                var videoId = item.id.videoId;
-                var videoTitle = item.snippet.title;
-                var videoThumbnail = item.snippet.thumbnails.medium.url;
-
-                var videoElement = document.createElement("div");
-                videoElement.classList.add("videoItem");
-                videoElement.innerHTML = `
-                    <img src="${videoThumbnail}" alt="${videoTitle}">
-                    <p>${videoTitle}</p>
-                    <button onclick="playVideo('${videoId}')">Play</button>
-                `;
-                searchResultsDiv.appendChild(videoElement);
-            });
-        }
-
-        // Function to play video
-        function playVideo(videoId) {
-            var videoPlayerDiv = document.getElementById("videoPlayer");
-            videoPlayerDiv.innerHTML = `
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-            `;
-        }
-    </script>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
